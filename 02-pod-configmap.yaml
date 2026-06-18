@@ -1,0 +1,42 @@
+# Pod — ConfigMap'ten değer oku
+#
+# 3 farklı yöntem gösterilmiştir:
+#   1. Tek tek ENV değişkeni al
+#   2. Tüm ConfigMap'i ENV olarak yükle
+#   3. Dosya olarak /etc/config altına mount et
+#
+# Çalıştır:
+#   oc apply -f 02-pod-configmap.yaml
+#   oc exec -it configmap-demo -- env | grep APP
+# ─────────────────────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tmp-no-init
+  namespace: dev
+spec:
+  volumes:
+    - name: tmp-volume
+      emptyDir: {}
+
+    - name: config
+      configMap:
+        name: app-config
+
+  containers:
+    - name: app
+      image: registry.access.redhat.com/ubi8/ubi-minimal
+
+      command:
+        - sh
+        - -c
+        - |
+          cp /config/app.properties /tmp/app.properties &&
+          cat /tmp/app.properties &&
+          sleep 3600
+
+      volumeMounts:
+        - name: tmp-volume
+          mountPath: /tmp
+        - name: config
+          mountPath: /config

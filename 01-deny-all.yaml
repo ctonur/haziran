@@ -1,0 +1,24 @@
+# Senaryo 0 — Varsayılan: Her şeyi engelle
+#
+# db-ns namespace'ine gelen TÜM trafik kesilir.
+# Sonraki adımda sadece app-ns'e açılır.
+#
+# Çalıştır:
+#   oc apply -f 01-deny-all.yaml
+#
+# Test (henüz hiç erişim yok):
+#   DB_IP=$(oc get pod db-pod -n db-ns -o jsonpath='{.status.podIP}')
+#   oc exec -n app-ns frontend-pod -- curl -s --connect-timeout 3 $DB_IP:5432
+#   → bağlantı zaman aşımına uğrar (ENGELLENDI)
+# ─────────────────────────────────────────────────────────────────────────────
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all-db
+  namespace: db-ns
+spec:
+  podSelector: {}     # db-ns'deki tüm pod'lar
+  policyTypes:
+    - Ingress
+    - Egress
+  # Kural yok → tüm trafik engellenir

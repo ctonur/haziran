@@ -1,0 +1,61 @@
+# LAB — NetworkPolicy: OpenShift Router'dan Gelen Trafiğe İzin Ver
+#
+# ─── GÖREV ───────────────────────────────────────────────────────────────────
+#
+# web-ns namespace'inde bir web uygulaması çalışıyor.
+# Aşağıdaki iki NetworkPolicy'yi yazın:
+#
+#   1. web-ns'deki TÜM trafiği varsayılan olarak engelle (deny-all)
+#
+#   2. Sadece OpenShift Router'ın (ingress controller) gelen
+#      trafiğine 8080 portunda izin ver.
+#
+#      İPUCU: OpenShift Router namespace'i şu etiketle işaretlidir:
+#        network.openshift.io/policy-group: ingress
+#
+# Hazırlık:
+#   oc new-project web-ns
+#   oc label ns web-ns env=web
+#
+# Test:
+#   oc get networkpolicy -n web-ns
+#
+# ─── CEVAP ───────────────────────────────────────────────────────────────────
+#
+# Kendiniz yazmayı deneyin. Yapamadıysanız aşağıdaki YAML'ı kullanın:
+#
+#   oc apply -f 04-senaryo3-karisik.yaml
+#
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Adım 1: Tüm trafiği engelle
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: web-deny-all
+  namespace: web-ns
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+---
+# Adım 2: Sadece OpenShift Router'dan gelen trafiğe izin ver
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: web-allow-router
+  namespace: web-ns
+spec:
+  podSelector:
+    matchLabels:
+      app: web
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              network.openshift.io/policy-group: ingress   # OpenShift Router etiketi
+      ports:
+        - port: 8080

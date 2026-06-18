@@ -1,0 +1,5 @@
+https://console-openshift-console.apps.garanti.westeurope.aroapp.io/
+
+kubeadmin	
+
+oZDKJ-vtyuM-WFdVF-khWIH

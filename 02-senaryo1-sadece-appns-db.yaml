@@ -1,0 +1,44 @@
+# Senaryo 1 — Sadece app-ns'den DB'ye erişim
+#
+# AMAÇ: db-ns'deki postgres pod'una sadece app-ns namespace'inden
+#       erişilebilsin, diğer namespace'ler erişemesin.
+#
+# Çalışma mantığı:
+#   app-ns namespace'i 'env: frontend' etiketine sahip.
+#   NetworkPolicy bu etiketi kontrol eder.
+#
+# Çalıştır:
+#   oc apply -f 02-senaryo1-sadece-appns-db.yaml
+#
+# Test — BAŞARILI bağlantı (app-ns):
+#   DB_IP=$(oc get pod db-pod -n db-ns -o jsonpath='{.status.podIP}')
+#   oc exec -n app-ns frontend-pod -- curl -s --connect-timeout 3 $DB_IP:5432
+#   → bağlantı açılır (PostgreSQL banner döner)
+#
+# Test — BAŞARISIZ bağlantı (other-ns):
+#   oc exec -n other-ns other-pod -- curl -s --connect-timeout 3 $DB_IP:5432
+#   → zaman aşımı (ENGELLENDI)
+# ─────────────────────────────────────────────────────────────────────────────
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: db-sadece-appns
+  namespace: db-ns         # Bu politika db-ns'e uygulanır
+spec:
+  podSelector:
+    matchLabels:
+      app: postgres        # Sadece postgres pod'larını etkiler
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        # Sadece 'env: frontend' etiketli namespace'den gelen trafiğe izin ver
+        - namespaceSelector:
+            matchLabels:
+              env: frontend    # app-ns bu etikete sahip (00-kurulum'da atandı)
+          # Ekstra kısıt: O namespace içinde de sadece belirli pod'lardan
+          podSelector:
+            matchLabels:
+              app: frontend
+      ports:
+        - port: 5432         # Sadece PostgreSQL portu

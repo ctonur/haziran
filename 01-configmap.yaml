@@ -1,0 +1,19 @@
+# ConfigMap — Şifresiz uygulama ayarları
+#
+# Veritabanı adresi, log seviyesi gibi ayarları pod'dan ayırır.
+# Değişince pod'u yeniden başlatmadan güncellenebilir.
+#
+# Çalıştır:
+#   oc apply -f 01-configmap.yaml
+#   oc describe cm app-config
+# ─────────────────────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: dev
+data:
+  app.properties: |
+    app.name=myapp
+    app.env=dev
+    app.port=8080
