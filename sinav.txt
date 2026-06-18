@@ -1,0 +1,100 @@
+# OpenShift Güvenlik Eğitimi — Kısa Sınav
+
+Her soruda **A**, **B** veya **C** seçeneklerinden birini seçin.
+
+---
+
+**1.** `automountServiceAccountToken: false` bir pod spec'ine eklenirse ne olur?
+
+A) Pod'un internet bağlantısı kesilir
+B) Pod, Kubernetes API'ye erişmek için kullanılan SA token'ını otomatik mount etmez
+C) Pod yeniden başlatıldığında token sıfırlanır
+
+---
+
+**2.** OpenShift'te bir pod'un root (UID 0) olarak çalışmasına izin veren SCC hangisidir?
+
+A) anyuid
+B) restricted
+C) privileged
+
+---
+
+**3.** `NetworkPolicy` ile `podSelector: {}` (boş seçici) yazılırsa ne anlama gelir?
+
+A) Hiçbir pod seçilmez, kural uygulanmaz
+B) Namespace'deki tüm pod'lar seçilir
+C) Sadece label'sız pod'lar seçilir
+
+---
+
+**4.** RHACS admission controller ne zaman devreye girer?
+
+A) Pod oluşturulmadan önce, deploy sırasında
+B) Pod çalışmaya başladıktan sonra
+C) Sadece pod silinirken
+
+---
+
+**5.** Compliance Operator taraması sonucunda FAIL çıkan kuralı otomatik düzeltmek için ne kullanılır?
+
+A) ScanSettingBinding
+B) ComplianceRemediation
+C) ComplianceSuite
+
+---
+
+**6.** `cosign sign --key cosign.key quay.io/myorg/myapp:v1.0` komutu ne yapar?
+
+A) Image'ı Quay.io'dan yerel makineye indirir
+B) Container image'ı dijital olarak imzalar
+C) Image içindeki CVE'leri tarar
+
+---
+
+**7.** EgressFirewall ne işe yarar?
+
+A) Dışarıdan namespace'e gelen bağlantıları filtreler
+B) Namespace'den internete çıkan bağlantıları filtreler
+C) Pod'lar arası tüm trafiği şifreler
+
+---
+
+**8.** `oc adm node-logs --role=master --path=openshift-apiserver/audit.log` ne gösterir?
+
+A) Pod'ların uygulama logları
+B) Kubernetes API'ye yapılan tüm isteklerin audit kaydı
+C) Node üzerindeki disk kullanım istatistikleri
+
+---
+
+**9.** RBAC'te `Role` ile `ClusterRole` arasındaki temel fark nedir?
+
+A) Role sadece bir namespace'de, ClusterRole tüm cluster'da geçerlidir
+B) Role ServiceAccount'lara, ClusterRole sadece kullanıcılara atanır
+C) Role ve ClusterRole aynıdır, sadece isimlendirme farklıdır
+
+---
+
+**10.** `securityContext.runAsNonRoot: true` ayarı ne yapar?
+
+A) Container'ın privileged modda çalışmasına izin verir
+B) Container'ın root (UID 0) kullanıcısıyla başlamasını engeller
+C) Container'a ekstra Linux capability ekler
+
+---
+
+## Cevaplar
+
+| Soru | Cevap |
+|------|-------|
+| 1    | B     |
+| 2    | A     |
+| 3    | B     |
+| 4    | A     |
+| 5    | B     |
+| 6    | B     |
+| 7    | B     |
+| 8    | B     |
+| 9    | A     |
+| 10   | B     |
