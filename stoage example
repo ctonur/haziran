@@ -19,12 +19,12 @@ spec:
         ports:
         - containerPort: 8080
         volumeMounts:
-        - name: app-storage
+        - name: -----------
           mountPath: /var/www/html
       volumes:
-      - name: app-storage
+      - name:----------
         persistentVolumeClaim:
-          claimName: app-storage
+          claimName: ------
   strategy:
     type: RollingUpdate
 
