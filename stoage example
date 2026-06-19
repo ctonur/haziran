@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd-storage
+  namespace: onur
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpd-storage
+  template:
+    metadata:
+      labels:
+        app: httpd-storage
+    spec:
+      containers:
+      - name: httpd
+        image: image-registry.openshift-image-registry.svc:5000/openshift/httpd:latest
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: app-storage
+          mountPath: /var/www/html
+      volumes:
+      - name: app-storage
+        persistentVolumeClaim:
+          claimName: app-storage
+  strategy:
+    type: RollingUpdate
+
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-storage
+  namespace: aliyildiz
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: managed-csi
+  resources:
+    requests:
+      storage: 5Gi
