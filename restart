@@ -1,0 +1,18 @@
+1. En Son Sürümü Tetiklemek (Rollout Latest)
+Eğer DeploymentConfig (dc) üzerindeki en güncel değişiklikleri veya en son imajı (latest) hemen devreye almak istiyorsan kullanman gereken komut:
+
+Bash
+oc rollout latest dc/onur
+2. Bir Önceki Sürüme Geri Dönmek (Rollback / Undo)
+Eğer bir sorun çıktıysa ve bir önceki sorunsuz çalışan versiyona geri dönmek (rollback) istiyorsan şu komutu kullanabilirsin:
+
+Bash
+oc rollout undo dc/onur
+💡 Not: Eğer bir önceki sürüme değil de daha eski, spesifik bir sürüme (örneğin 3. versiyona) dönmek istersen komutun sonuna --to-revision parametresini ekleyebilirsin:
+oc rollout undo dc/onur --to-revision=3
+
+Durumu Kontrol Etmek İçin:
+Deployment'ın ne durumda olduğunu canlı olarak izlemek istersen şu komutu da kullanabilirsin:
+
+Bash
+oc rollout status dc/onur
